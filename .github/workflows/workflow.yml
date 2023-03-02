@@ -28,16 +28,20 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Set up kubelogin for non-interactive login
-        run: |
-          if ! kubelogin --version
-          then
-           curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.27/kubelogin-linux-amd64.zip
-           sudo unzip -j kubelogin-linux-amd64.zip -d /usr/local/bin
-           rm -f kubelogin-linux-amd64.zip
-           kubelogin --version
-          fi
-        shell: bash
+      # - name: Set up kubelogin for non-interactive login
+      #   run: |
+      #     if ! kubelogin --version
+      #     then
+      #      curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.27/kubelogin-linux-amd64.zip
+      #      sudo unzip -j kubelogin-linux-amd64.zip -d /usr/local/bin
+      #      rm -f kubelogin-linux-amd64.zip
+      #      kubelogin --version
+      #     fi
+      #   shell: bash
+
+      - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: "v0.0.27"
 
       - name: Install Helm
         uses: Azure/setup-helm@v3
