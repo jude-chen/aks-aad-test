@@ -1,0 +1,69 @@
+name: Nginx_Plus_Image_Build_Push to ACR
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - uses: azure/setup-kubectl@v2.0
+        with:
+          version: "latest"
+        id: install
+
+      - name: Setup az aks
+        run: az aks install-cli | sudo bash
+
+      - uses: azure/login@v1
+        name: Log in with Azure
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set up kubelogin for non-interactive login
+        run: |
+          if ! kubelogin --version
+          then
+           curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.9/kubelogin-linux-amd64.zip
+           sudo unzip -j kubelogin-linux-amd64.zip -d /usr/local/bin
+           rm -f kubelogin-linux-amd64.zip
+           kubelogin --version
+          fi
+        shell: bash
+
+      - name: Install Helm
+        uses: Azure/setup-helm@v3
+        with:
+          version: v3.3.1
+          id: install
+
+      - uses: azure/aks-set-context@v3
+        with:
+          resource-group: aks-test-rg
+          cluster-name: aks-test-01
+          admin: "false"
+          use-kubelogin: "true"
+
+      - name: Run Helm Deploy
+        run: |
+          #  TEMP_FOLDER="$(mktemp -d)"
+          #  echo Clone the repository...
+          #  git clone -b INT-API-AKS-EU2-PERFUAT 'https://Tractor-Supply-Cloud-Infrastructure:${{secrets.PAT_GITHUB_TOKEN}}@github.com/Tractor-Supply-Cloud-Infrastructure/tsc_nginx_plus_build_push_acr.git' ${TEMP_FOLDER}
+          #  cd ${TEMP_FOLDER}/deployments/helm-chart/
+          #  ls
+          #  cat values.yaml | grep -i 200
+          #  helm repo add nginx-stable https://helm.nginx.com/stable
+          #  helm repo update
+          #  export KUBE_CONFIG_PATH=~/.kube/config
+           kubectl get nodes -o wide
+          #  helm upgrade --install --create-namespace --namespace ingress-nginx-plus nginx-plus-nginx-ingress nginx-stable/nginx-ingress -f ./values.yaml
+           #helm uninstall nginx-plus-nginx-ingress -n ingress-nginx-plus
+           #kubectl delete ns ingress-nginx-plus
