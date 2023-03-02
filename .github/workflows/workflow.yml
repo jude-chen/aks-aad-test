@@ -32,7 +32,7 @@ jobs:
         run: |
           if ! kubelogin --version
           then
-           curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.9/kubelogin-linux-amd64.zip
+           curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.27/kubelogin-linux-amd64.zip
            sudo unzip -j kubelogin-linux-amd64.zip -d /usr/local/bin
            rm -f kubelogin-linux-amd64.zip
            kubelogin --version
@@ -63,8 +63,8 @@ jobs:
           #  helm repo add nginx-stable https://helm.nginx.com/stable
           #  helm repo update
           #  export KUBE_CONFIG_PATH=~/.kube/config
-          export KUBECONFIG=~/.kube/config
-          kubelogin convert-kubeconfig -l azurecli
+          # export KUBECONFIG=~/.kube/config
+          # kubelogin convert-kubeconfig -l azurecli
           kubectl get nodes -o wide
           #  helm upgrade --install --create-namespace --namespace ingress-nginx-plus nginx-plus-nginx-ingress nginx-stable/nginx-ingress -f ./values.yaml
           #helm uninstall nginx-plus-nginx-ingress -n ingress-nginx-plus
