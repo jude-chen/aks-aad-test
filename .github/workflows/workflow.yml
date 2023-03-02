@@ -63,7 +63,9 @@ jobs:
           #  helm repo add nginx-stable https://helm.nginx.com/stable
           #  helm repo update
           #  export KUBE_CONFIG_PATH=~/.kube/config
-           kubectl get nodes -o wide
+          export KUBECONFIG=~/.kube/config
+          kubelogin convert-kubeconfig -l azurecli
+          kubectl get nodes -o wide
           #  helm upgrade --install --create-namespace --namespace ingress-nginx-plus nginx-plus-nginx-ingress nginx-stable/nginx-ingress -f ./values.yaml
-           #helm uninstall nginx-plus-nginx-ingress -n ingress-nginx-plus
-           #kubectl delete ns ingress-nginx-plus
+          #helm uninstall nginx-plus-nginx-ingress -n ingress-nginx-plus
+          #kubectl delete ns ingress-nginx-plus
