@@ -11,17 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      # - name: Install Azure CLI
+      #   run: |
+      #     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      - uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az aks install-cli
 
       - uses: azure/setup-kubectl@v2.0
         with:
           version: "latest"
         id: install
 
-      - name: Setup az aks
-        run: az aks install-cli | sudo bash
+      # - name: Setup az aks
+      #   run: az aks install-cli | sudo bash
 
       - uses: azure/login@v1
         name: Log in with Azure
